@@ -1,0 +1,15 @@
+  0000aaaabbbbtttt  add rt,ra,rb  regs[t] = regs[a] + regs[b]
+  0001aaaabbbbtttt  mul rt,ra,rb  regs[t] = regs[a] * regs[b]
+
+  1000iiiiiiiitttt  movl rt,i     regs[t] = sign_extend(i)
+
+  1110aaaa0000tttt  jz rt,ra      pc = (regs[ra] == 0) ? regs[rt] : pc + 2
+  1110aaaa0001tttt  jmp rt	  pc = regs[rt] 
+
+  1111aaaa0000tttt  ld rt,ra      regs[t] = mem[regs[a]]
+  1111aaaa0001tttt  st rt,ra      mem[regs[a]] = regs[t]
+
+
+  regs[t] will hold the final result of any expression i.e. 10, x == y, val1 + 10*val2
+  regs[a], regs[b] used mid-expression
+  regs[0] used for printing
