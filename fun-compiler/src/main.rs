@@ -2,8 +2,6 @@ use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 use std::collections::HashMap;
-//use std::cell::RefCell;
-//use std::rc::Rc;
 
 const ELSE: u8 = 0;
 const END: u8 = 1;
@@ -385,6 +383,4 @@ fn main() {
   //println!("Text: \n{:?}\n{}", state.input, state.input.len());
 
   program(&mut state);
-
-  //println!("Text: \n{:?}", Inter.input);
 }
