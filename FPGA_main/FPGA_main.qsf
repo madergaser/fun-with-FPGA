@@ -47,7 +47,123 @@ set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 256
 set_global_assignment -name VERILOG_FILE FPGA_main.v
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_location_assignment PIN_V19 -to HEX0_pos0
+set_location_assignment PIN_V18 -to HEX0_pos1
+set_location_assignment PIN_V17 -to HEX0_pos2
+set_location_assignment PIN_W18 -to HEX0_pos3
+set_location_assignment PIN_Y20 -to HEX0_pos4
+set_location_assignment PIN_Y19 -to HEX0_pos5
+set_location_assignment PIN_Y18 -to HEX0_pos6
+set_location_assignment PIN_AA18 -to HEX1_pos0
+set_location_assignment PIN_AD26 -to HEX1_pos1
+set_location_assignment PIN_AB19 -to HEX1_pos2
+set_location_assignment PIN_AE26 -to HEX1_pos3
+set_location_assignment PIN_AE25 -to HEX1_pos4
+set_location_assignment PIN_AC19 -to HEX1_pos5
+set_location_assignment PIN_AF24 -to HEX1_pos6
+set_location_assignment PIN_AD7 -to HEX2_pos0
+set_location_assignment PIN_AD6 -to HEX2_pos1
+set_location_assignment PIN_U20 -to HEX2_pos2
+set_location_assignment PIN_V22 -to HEX2_pos3
+set_location_assignment PIN_V20 -to HEX2_pos4
+set_location_assignment PIN_W21 -to HEX2_pos5
+set_location_assignment PIN_W20 -to HEX2_pos6
+set_location_assignment PIN_Y24 -to HEX3_pos0
+set_location_assignment PIN_Y23 -to HEX3_pos1
+set_location_assignment PIN_AA23 -to HEX3_pos2
+set_location_assignment PIN_AA22 -to HEX3_pos3
+set_location_assignment PIN_AC24 -to HEX3_pos4
+set_location_assignment PIN_AC23 -to HEX3_pos5
+set_location_assignment PIN_AC22 -to HEX3_pos6
+set_location_assignment PIN_R20 -to clk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX0_pos0
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX0_pos1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX0_pos2
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX0_pos3
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX0_pos4
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX0_pos5
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX0_pos6
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX1_pos0
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX1_pos1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX1_pos2
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX1_pos3
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX1_pos4
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX1_pos5
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX1_pos6
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX2_pos0
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX2_pos1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX2_pos2
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX2_pos3
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX2_pos4
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX2_pos6
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX2_pos5
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3_pos6
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3_pos5
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3_pos4
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3_pos3
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3_pos2
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3_pos1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3_pos0
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX0_pos0
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX0_pos4
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to clk
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX3_pos6
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX3_pos5
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX3_pos4
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX3_pos3
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX3_pos2
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX3_pos1
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX2_pos6
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX3_pos0
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX2_pos5
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX2_pos4
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX2_pos3
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX2_pos2
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX2_pos1
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX2_pos0
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX1_pos6
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX1_pos5
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX1_pos4
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX1_pos3
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX1_pos2
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX1_pos1
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX1_pos0
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX0_pos6
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX0_pos5
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX0_pos3
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX0_pos2
+set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX0_pos1
+set_instance_assignment -name SLEW_RATE 1 -to HEX0_pos0
+set_instance_assignment -name SLEW_RATE 1 -to HEX0_pos1
+set_instance_assignment -name SLEW_RATE 1 -to HEX0_pos2
+set_instance_assignment -name SLEW_RATE 1 -to HEX0_pos3
+set_instance_assignment -name SLEW_RATE 1 -to HEX0_pos5
+set_instance_assignment -name SLEW_RATE 1 -to HEX0_pos6
+set_instance_assignment -name SLEW_RATE 1 -to HEX1_pos0
+set_instance_assignment -name SLEW_RATE 1 -to HEX1_pos1
+set_instance_assignment -name SLEW_RATE 1 -to HEX1_pos2
+set_instance_assignment -name SLEW_RATE 1 -to HEX1_pos3
+set_instance_assignment -name SLEW_RATE 1 -to HEX1_pos4
+set_instance_assignment -name SLEW_RATE 1 -to HEX1_pos5
+set_instance_assignment -name SLEW_RATE 1 -to HEX1_pos6
+set_instance_assignment -name SLEW_RATE 1 -to HEX2_pos0
+set_instance_assignment -name SLEW_RATE 1 -to HEX2_pos1
+set_instance_assignment -name SLEW_RATE 1 -to HEX2_pos2
+set_instance_assignment -name SLEW_RATE 1 -to HEX2_pos3
+set_instance_assignment -name SLEW_RATE 1 -to HEX2_pos4
+set_instance_assignment -name SLEW_RATE 1 -to HEX2_pos5
+set_instance_assignment -name SLEW_RATE 1 -to HEX2_pos6
+set_instance_assignment -name SLEW_RATE 1 -to HEX3_pos0
+set_instance_assignment -name SLEW_RATE 1 -to HEX3_pos1
+set_instance_assignment -name SLEW_RATE 1 -to HEX3_pos2
+set_instance_assignment -name SLEW_RATE 1 -to HEX3_pos4
+set_instance_assignment -name SLEW_RATE 1 -to HEX3_pos3
+set_instance_assignment -name SLEW_RATE 1 -to HEX3_pos5
+set_instance_assignment -name SLEW_RATE 1 -to HEX3_pos6
+set_instance_assignment -name SLEW_RATE 1 -to HEX0_pos4
+set_global_assignment -name VERILOG_FILE mem.v
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
