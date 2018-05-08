@@ -31,7 +31,9 @@ module FPGA_main (
 	output wire HEX0_pos3,
 	output wire HEX0_pos4,
 	output wire HEX0_pos5,
-	output wire HEX0_pos6
+	output wire HEX0_pos6,
+
+	output wire ledr9
 );
 
     reg halt = 0;
@@ -57,7 +59,7 @@ module FPGA_main (
 		en, waddr, wdata);
 
    // register file
-   reg [15:0]rf[0:15];
+   reg [15:0]rf[0:5];
 
 	wire [3:0]opcode = ins[15:12];
 	wire [3:0]xop = ins[7:4];
@@ -67,6 +69,8 @@ module FPGA_main (
 	wire isMul = (opcode == 1);
 	
 	wire isMovl = (opcode == 8);
+	
+	wire isStorePC = (opcode == 10);
 
 	wire isJz  = (opcode == 14) & (xop == 0);
 	wire isJmp = (opcode == 14) & (xop == 1);
@@ -136,42 +140,43 @@ module FPGA_main (
 	wire digit0_is9 = wdata % 10 == 9;
 	
 	// change LED display
-	assign HEX3_pos0 = shouldDisplay & ( digit3_is2 | digit3_is3 | digit3_is5 | digit3_is6 | digit3_is7 | digit3_is8 | digit3_is9 );
-	assign HEX3_pos1 = shouldDisplay & ( digit3_is1 | digit3_is2 | digit3_is3 | digit3_is4 | digit3_is7 | digit3_is8 | digit3_is9 );
-	assign HEX3_pos2 = shouldDisplay & ( digit3_is1 | digit3_is3 | digit3_is4 | digit3_is5 | digit3_is6 | digit3_is7 | digit3_is8 | digit3_is9 );
-	assign HEX3_pos3 = shouldDisplay & ( digit3_is2 | digit3_is3 | digit3_is5 | digit3_is6 | digit3_is8 | digit3_is9 );
-	assign HEX3_pos4 = shouldDisplay & ( digit3_is2 | digit3_is6 | digit3_is8 );
-	assign HEX3_pos5 = shouldDisplay & ( digit3_is4 | digit3_is5 | digit3_is6 | digit3_is8 | digit3_is9 );
+	assign HEX3_pos0 = shouldDisplay & ( digit3_is0 | digit3_is2 | digit3_is3 | digit3_is5 | digit3_is6 | digit3_is7 | digit3_is8 | digit3_is9 );
+	assign HEX3_pos1 = shouldDisplay & ( digit3_is0 | digit3_is1 | digit3_is2 | digit3_is3 | digit3_is4 | digit3_is7 | digit3_is8 | digit3_is9 );
+	assign HEX3_pos2 = shouldDisplay & ( digit3_is0 | digit3_is1 | digit3_is3 | digit3_is4 | digit3_is5 | digit3_is6 | digit3_is7 | digit3_is8 | digit3_is9 );
+	assign HEX3_pos3 = shouldDisplay & ( digit3_is0 | digit3_is2 | digit3_is3 | digit3_is5 | digit3_is6 | digit3_is8 | digit3_is9 );
+	assign HEX3_pos4 = shouldDisplay & ( digit3_is0 | digit3_is2 | digit3_is6 | digit3_is8 );
+	assign HEX3_pos5 = shouldDisplay & ( digit3_is0 | digit3_is4 | digit3_is5 | digit3_is6 | digit3_is8 | digit3_is9 );
 	assign HEX3_pos6 = shouldDisplay & ( digit3_is2 | digit3_is3 | digit3_is4 | digit3_is5 | digit3_is6 | digit3_is8 | digit3_is9 );
 	
-	assign HEX2_pos0 = shouldDisplay & ( digit2_is2 | digit2_is3 | digit2_is5 | digit2_is6 | digit2_is7 | digit2_is8 | digit2_is9 );
-   assign HEX2_pos1 = shouldDisplay & ( digit2_is1 | digit2_is2 | digit2_is3 | digit2_is4 | digit2_is7 | digit2_is8 | digit2_is9 );
-   assign HEX2_pos2 = shouldDisplay & ( digit2_is1 | digit2_is3 | digit2_is4 | digit2_is5 | digit2_is6 | digit2_is7 | digit2_is8 | digit2_is9 );
-   assign HEX2_pos3 = shouldDisplay & ( digit2_is2 | digit2_is3 | digit2_is5 | digit2_is6 | digit2_is8 | digit2_is9 );
-   assign HEX2_pos4 = shouldDisplay & ( digit2_is2 | digit2_is6 | digit2_is8 );
-   assign HEX2_pos5 = shouldDisplay & ( digit2_is4 | digit2_is5 | digit2_is6 | digit2_is8 | digit2_is9 );
+	assign HEX2_pos0 = shouldDisplay & ( digit2_is0 | digit2_is2 | digit2_is3 | digit2_is5 | digit2_is6 | digit2_is7 | digit2_is8 | digit2_is9 );
+   assign HEX2_pos1 = shouldDisplay & ( digit2_is0 | digit2_is1 | digit2_is2 | digit2_is3 | digit2_is4 | digit2_is7 | digit2_is8 | digit2_is9 );
+   assign HEX2_pos2 = shouldDisplay & ( digit2_is0 | digit2_is1 | digit2_is3 | digit2_is4 | digit2_is5 | digit2_is6 | digit2_is7 | digit2_is8 | digit2_is9 );
+   assign HEX2_pos3 = shouldDisplay & ( digit2_is0 | digit2_is2 | digit2_is3 | digit2_is5 | digit2_is6 | digit2_is8 | digit2_is9 );
+   assign HEX2_pos4 = shouldDisplay & ( digit2_is0 | digit2_is2 | digit2_is6 | digit2_is8 );
+   assign HEX2_pos5 = shouldDisplay & ( digit2_is0 | digit2_is4 | digit2_is5 | digit2_is6 | digit2_is8 | digit2_is9 );
    assign HEX2_pos6 = shouldDisplay & ( digit2_is2 | digit2_is3 | digit2_is4 | digit2_is5 | digit2_is6 | digit2_is8 | digit2_is9 );
 
-   assign HEX1_pos0 = shouldDisplay & ( digit1_is2 | digit1_is3 | digit1_is5 | digit1_is6 | digit1_is7 | digit1_is8 | digit1_is9 );
-   assign HEX1_pos1 = shouldDisplay & ( digit1_is1 | digit1_is2 | digit1_is3 | digit1_is4 | digit1_is7 | digit1_is8 | digit1_is9 );
-   assign HEX1_pos2 = shouldDisplay & ( digit1_is1 | digit1_is3 | digit1_is4 | digit1_is5 | digit1_is6 | digit1_is7 | digit1_is8 | digit1_is9 );
-   assign HEX1_pos3 = shouldDisplay & ( digit1_is2 | digit1_is3 | digit1_is5 | digit1_is6 | digit1_is8 | digit1_is9 );
-   assign HEX1_pos4 = shouldDisplay & ( digit1_is2 | digit1_is6 | digit1_is8 );
-   assign HEX1_pos5 = shouldDisplay & ( digit1_is4 | digit1_is5 | digit1_is6 | digit1_is8 | digit1_is9 );
+   assign HEX1_pos0 = shouldDisplay & ( digit1_is0 | digit1_is2 | digit1_is3 | digit1_is5 | digit1_is6 | digit1_is7 | digit1_is8 | digit1_is9 );
+   assign HEX1_pos1 = shouldDisplay & ( digit1_is0 |digit1_is1 | digit1_is2 | digit1_is3 | digit1_is4 | digit1_is7 | digit1_is8 | digit1_is9 );
+   assign HEX1_pos2 = shouldDisplay & ( digit1_is0 |digit1_is1 | digit1_is3 | digit1_is4 | digit1_is5 | digit1_is6 | digit1_is7 | digit1_is8 | digit1_is9 );
+   assign HEX1_pos3 = shouldDisplay & ( digit1_is0 |digit1_is2 | digit1_is3 | digit1_is5 | digit1_is6 | digit1_is8 | digit1_is9 );
+   assign HEX1_pos4 = shouldDisplay & ( digit1_is0 |digit1_is2 | digit1_is6 | digit1_is8 );
+   assign HEX1_pos5 = shouldDisplay & ( digit1_is0 |digit1_is4 | digit1_is5 | digit1_is6 | digit1_is8 | digit1_is9 );
    assign HEX1_pos6 = shouldDisplay & ( digit1_is2 | digit1_is3 | digit1_is4 | digit1_is5 | digit1_is6 | digit1_is8 | digit1_is9 );
 
-   assign HEX0_pos0 = shouldDisplay & ( digit0_is2 | digit0_is3 | digit0_is5 | digit0_is6 | digit0_is7 | digit0_is8 | digit0_is9 );
-   assign HEX0_pos1 = shouldDisplay & ( digit0_is1 | digit0_is2 | digit0_is3 | digit0_is4 | digit0_is7 | digit0_is8 | digit0_is9 );
-   assign HEX0_pos2 = shouldDisplay & ( digit0_is1 | digit0_is3 | digit0_is4 | digit0_is5 | digit0_is6 | digit0_is7 | digit0_is8 | digit0_is9 );
-   assign HEX0_pos3 = shouldDisplay & ( digit0_is2 | digit0_is3 | digit0_is5 | digit0_is6 | digit0_is8 | digit0_is9 );
-   assign HEX0_pos4 = shouldDisplay & ( digit0_is2 | digit0_is6 | digit0_is8 );
-   assign HEX0_pos5 = shouldDisplay & ( digit0_is4 | digit0_is5 | digit0_is6 | digit0_is8 | digit0_is9 );
+   assign HEX0_pos0 = shouldDisplay & ( digit0_is0 | digit0_is2 | digit0_is3 | digit0_is5 | digit0_is6 | digit0_is7 | digit0_is8 | digit0_is9 );
+   assign HEX0_pos1 = shouldDisplay & ( digit0_is0 | digit0_is1 | digit0_is2 | digit0_is3 | digit0_is4 | digit0_is7 | digit0_is8 | digit0_is9 );
+   assign HEX0_pos2 = shouldDisplay & ( digit0_is0 | digit0_is1 | digit0_is3 | digit0_is4 | digit0_is5 | digit0_is6 | digit0_is7 | digit0_is8 | digit0_is9 );
+   assign HEX0_pos3 = shouldDisplay & ( digit0_is0 | digit0_is2 | digit0_is3 | digit0_is5 | digit0_is6 | digit0_is8 | digit0_is9 );
+   assign HEX0_pos4 = shouldDisplay & ( digit0_is0 | digit0_is2 | digit0_is6 | digit0_is8 );
+   assign HEX0_pos5 = shouldDisplay & ( digit0_is0 | digit0_is4 | digit0_is5 | digit0_is6 | digit0_is8 | digit0_is9 );
    assign HEX0_pos6 = shouldDisplay & ( digit0_is2 | digit0_is3 | digit0_is4 | digit0_is5 | digit0_is6 | digit0_is8 | digit0_is9 );
 	
 	// rhs of op
 	wire [15:0]out = isAdd  ? ra + rb :
 					 isMul ? ra * rb :
 				    isMovl ? { {8{ri[7]}}, ri[7:0] } :
+					 isStorePC ? pc :
 					 isJz  & ra == 16'h0000 ? rt :
 					 isJmp ? rt :
 					 isLd ? raData  :
@@ -184,10 +189,12 @@ module FPGA_main (
 	assign waddr = ra;		 
 	assign wdata = out;
 
-	assign isRecognized = (isAdd | isMul | isMovl | isJz | isJmp | isLd | isSt);			 
+	assign isRecognized = (isAdd | isMul | isMovl | isStorePC | isJz | isJmp | isLd | isSt);			 
 	assign shouldJump = (isJz | isJmp);
-	assign shouldChangeReg = (isAdd | isMul | isMovl | isLd);
+	assign shouldChangeReg = (isAdd | isMul | isStorePC | isMovl | isLd);
 	assign shouldDisplay = (shouldChangeReg & t == 0);
+	
+	assign ledr9 = isRecognized;
 
     always @(posedge clk) begin
 		if (count == 0) begin
