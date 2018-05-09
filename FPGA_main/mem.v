@@ -11,10 +11,10 @@ module mem(input clk,
     end
 
     // get instruction
-    assign rdata = { data[raddr0]};
+    assign rdata = data[raddr0];
 	
     // get data at ra
-    assign raData = { data[raddr1]};
+    assign raData = data[raddr1];
 
     always @(posedge clk) begin
         if (wen0) begin

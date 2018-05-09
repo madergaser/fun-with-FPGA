@@ -79,64 +79,64 @@ set_location_assignment PIN_AC24 -to HEX3_pos4
 set_location_assignment PIN_AC23 -to HEX3_pos5
 set_location_assignment PIN_AC22 -to HEX3_pos6
 set_location_assignment PIN_R20 -to clk
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX0_pos0
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX0_pos1
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX0_pos2
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX0_pos3
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX0_pos4
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX0_pos5
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX0_pos6
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX1_pos0
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX1_pos1
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX1_pos2
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX1_pos3
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX1_pos4
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX1_pos5
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX1_pos6
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX2_pos0
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX2_pos1
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX2_pos2
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX2_pos3
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX2_pos4
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX2_pos6
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX2_pos5
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clk
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3_pos6
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3_pos5
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3_pos4
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3_pos3
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3_pos2
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3_pos1
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3_pos0
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX0_pos0
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX0_pos4
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to clk
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX3_pos6
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX3_pos5
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX3_pos4
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX3_pos3
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX3_pos2
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX3_pos1
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX2_pos6
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX3_pos0
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX2_pos5
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX2_pos4
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX2_pos3
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX2_pos2
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX2_pos1
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX2_pos0
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX1_pos6
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX1_pos5
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX1_pos4
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX1_pos3
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX1_pos2
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX1_pos1
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX1_pos0
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX0_pos6
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX0_pos5
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX0_pos3
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX0_pos2
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to HEX0_pos1
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0_pos0
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0_pos1
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0_pos2
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0_pos3
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0_pos4
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0_pos5
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0_pos6
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1_pos0
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1_pos1
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1_pos2
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1_pos3
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1_pos4
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1_pos5
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1_pos6
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX2_pos0
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX2_pos1
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX2_pos2
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX2_pos3
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX2_pos4
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX2_pos6
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX2_pos5
+set_instance_assignment -name IO_STANDARD "2.5 V" -to clk
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX3_pos6
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX3_pos5
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX3_pos4
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX3_pos3
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX3_pos2
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX3_pos1
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX3_pos0
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX0_pos0
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX0_pos4
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to clk
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX3_pos6
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX3_pos5
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX3_pos4
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX3_pos3
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX3_pos2
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX3_pos1
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX2_pos6
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX3_pos0
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX2_pos5
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX2_pos4
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX2_pos3
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX2_pos2
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX2_pos1
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX2_pos0
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX1_pos6
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX1_pos5
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX1_pos4
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX1_pos3
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX1_pos2
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX1_pos1
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX1_pos0
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX0_pos6
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX0_pos5
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX0_pos3
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX0_pos2
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to HEX0_pos1
 set_instance_assignment -name SLEW_RATE 1 -to HEX0_pos0
 set_instance_assignment -name SLEW_RATE 1 -to HEX0_pos1
 set_instance_assignment -name SLEW_RATE 1 -to HEX0_pos2
@@ -167,7 +167,15 @@ set_instance_assignment -name SLEW_RATE 1 -to HEX3_pos6
 set_instance_assignment -name SLEW_RATE 1 -to HEX0_pos4
 set_global_assignment -name VERILOG_FILE mem.v
 set_location_assignment PIN_J10 -to ledr9
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ledr9
-set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to ledr9
+set_instance_assignment -name IO_STANDARD "2.5 V" -to ledr9
+set_instance_assignment -name CURRENT_STRENGTH_NEW 12MA -to ledr9
 set_instance_assignment -name SLEW_RATE 1 -to ledr9
+set_location_assignment PIN_F7 -to ledr0
+set_location_assignment PIN_K8 -to ledr7
+set_location_assignment PIN_K10 -to ledr6
+set_location_assignment PIN_J7 -to ledr5
+set_location_assignment PIN_J8 -to ledr4
+set_location_assignment PIN_G7 -to ledr3
+set_location_assignment PIN_G6 -to ledr2
+set_location_assignment PIN_F6 -to ledr1
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
