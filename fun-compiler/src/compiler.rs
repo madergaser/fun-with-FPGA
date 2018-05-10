@@ -35,7 +35,8 @@ struct Token {
 struct Interpreter_State {
   curr_token: Token,
   table: HashMap<Vec<u8>, u64>,
-  input: Vec<u8>
+  input: Vec<u8>,
+  tag_count: u64
 }
 
 
@@ -326,28 +327,58 @@ fn statement(state: &mut Interpreter_State, doit:bool, outfile: &mut File) -> bo
     //TODO: NESTING FOR IFS
     IF => {
       consume(state);
-      let temp: u64 = expression(state);
-      statement(state, doit && temp != 0);
+      expression(state, outfile, doit);
+      let temp_tag_count = state.tag_count;
+      if doit {
+        state.tag_count = state.tag_count + 1;
+        outfile.write_fmt(format_args!("jzn r4\n"));
+        outfile.write_fmt(format_args!("$ELSE{}\n", temp_tag_count));
+      }
+      statement(state, doit, outfile);
+      if doit {
+        outfile.write_fmt(format_args!("jzn r0\n"));
+        outfile.write_fmt(format_args!("$DONE{}\n", temp_tag_count));
+        outfile.write_fmt(format_args!("ELSE{}:\n", temp_tag_count));
+      }
       let tempKind = peek(state);
       if tempKind == SEMI {
         consume(state);
       }
       if tempKind == ELSE {
         consume(state);
-        statement(state, doit && temp == 0);
+        statement(state, doit, outfile);
+      }
+      if doit {
+        outfile.write_fmt(format_args!("DONE{}:\n", temp_tag_count));
       }
       return true;
     }
     WHILE => {
       consume(state);
-      let start = state.curr_token.start_in;
-      let end = state.curr_token.end_in;
-      while expression(state) != 0 && doit {
-        statement(state, true);
-        state.curr_token.start_in = start;
-        state.curr_token.end_in = end;
-        peek(state);
+      //let start = state.curr_token.start_in;
+      //let end = state.curr_token.end_in;
+      let temp_tag_count = state.tag_count;
+      if doit {
+        state.tag_count = state.tag_count + 1;
+        outfile.write_fmt(format_args!("WHILE{}:\n", temp_tag_count));
       }
+      expression(state, outfile, doit);
+      if doit {
+        outfile.write_fmt(format_args!("jzn r4\n"));
+        outfile.write_fmt(format_args!("$DONE{}\n", temp_tag_count));
+      }
+      statement(state, doit, outfile);
+      if doit {
+        outfile.write_fmt(format_args!("jzn r0\n"));
+        outfile.write_fmt(format_args!("$WHILE{}\n", temp_tag_count));
+        outfile.write_fmt(format_args!("DONE{}:\n", temp_tag_count));
+      }
+      //while expression(state) != 0 && doit {
+      //  statement(state, true);
+      //  state.curr_token.start_in = start;
+      //  state.curr_token.end_in = end;
+      //  peek(state);
+      //}
       statement(state, false);
       return true;
     }
@@ -357,12 +388,9 @@ fn statement(state: &mut Interpreter_State, doit:bool, outfile: &mut File) -> bo
       if peek(state) == SEMI {
         return true;
       }
+      expression(state, outfile, doit);
       if doit {
-        //println!("Really should be printing!");
-        println!("{}", expression(state));
-        //println!("Should be done printing!");
-      } else {
-        expression(state);
+        outfile.write_fmt(format_args!("add r0,r4,r0\n"));
       }
       return true;
     }
@@ -417,7 +445,7 @@ fn functions(state: &mut Interpreter_State, outfile: &mut File) {
       statement(state, outfile, true);
       state.curr_token.start_in = prev_start;
       state.curr_token.end_in = prev_end;
-      outfile.write_fmt(format_args!("jmpa 5,4\n"));
+      outfile.write_fmt(format_args!("jmpa r7,4\n"));
     }
     consume(state);
   }
@@ -438,7 +466,8 @@ fn main() {
   let mut state = Interpreter_State {
     curr_token: Token{kind: NONE, start_in: 0, end_in: 0},
     table: HashMap::new(),
-    input: all_content.into_bytes()
+    input: all_content.into_bytes(),
+    tag_count: 0
   };
 
   variables(&mut state, &mut outfile);
