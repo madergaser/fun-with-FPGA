@@ -2,6 +2,22 @@
 module FPGA_main (
 	input wire clk, // 50MHz input clock
 	
+	input wire key3,
+	input wire key2,
+	input wire key1,
+	input wire key0,
+	
+	input wire sw9,
+	input wire sw8,
+	input wire sw7,
+	input wire sw6,
+	input wire sw5,
+	input wire sw4,
+	input wire sw3,
+	input wire sw2,
+	input wire sw1,
+	input wire sw0,
+	
 	output wire HEX3_pos0,
 	output wire HEX3_pos1,
 	output wire HEX3_pos2,
@@ -35,6 +51,7 @@ module FPGA_main (
 	output wire HEX0_pos6,
 	
 	output wire ledr9,
+	output wire ledr8,
 	output wire ledr7,
 	output wire ledr6,
 	output wire ledr5,
@@ -42,10 +59,20 @@ module FPGA_main (
 	output wire ledr3,
 	output wire ledr2,
 	output wire ledr1,
-	output wire ledr0
+	output wire ledr0,
+	
+	output wire ledg7,
+	output wire ledg6,
+	output wire ledg5,
+	output wire ledg4,
+	output wire ledg3,
+	output wire ledg2,
+	output wire ledg1,
+	output wire ledg0
 );
 
     reg halt = 0;
+	 reg waiting = 1;
 	 reg [31:0]count = 0;
 
     // PC
@@ -101,13 +128,16 @@ module FPGA_main (
 	wire [15:0]rb = b == 0 ? 0 : rf[b];
 	wire [15:0]rt = t == 0 ? 0 : rf[t];
 	
+	wire [15:0]userInput = { sw9, sw8, sw7, sw6, sw5, sw4, sw3, sw2, sw1, sw0 };
+	
 	wire isRecognized;
 	wire shouldJump;
 	wire shoudChangeReg;
 	wire shouldDisplay;
 	
 	// get values of digits 
-	wire[3:0] digit3 = wdata/1000%10;
+	wire[3:0] digit3 = waiting ? userInput/1000%10 :
+							wdata/1000%10;
 	wire digit3_is0 = digit3 == 0;
 	wire digit3_is1 = digit3 == 1;
 	wire digit3_is2 = digit3 == 2;
@@ -119,7 +149,8 @@ module FPGA_main (
 	wire digit3_is8 = digit3 == 8;
 	wire digit3_is9 = digit3 == 9;
 	
-	wire[3:0] digit2 = wdata/100%10;
+	wire[3:0] digit2 = waiting ? userInput/100%10 :
+							wdata/100%10;
 	wire digit2_is0 = digit2 == 0;
 	wire digit2_is1 = digit2 == 1;
 	wire digit2_is2 = digit2 == 2;
@@ -131,7 +162,8 @@ module FPGA_main (
 	wire digit2_is8 = digit2 == 8;
 	wire digit2_is9 = digit2 == 9;
 	
-	wire[3:0] digit1 = wdata/10%10;
+	wire[3:0] digit1 = waiting ? userInput/10%10 :
+							wdata/10%10;
 	wire digit1_is0 = digit1 == 0;
 	wire digit1_is1 = digit1 == 1;
 	wire digit1_is2 = digit1 == 2;
@@ -143,7 +175,8 @@ module FPGA_main (
 	wire digit1_is8 = digit1 == 8;
 	wire digit1_is9 = digit1 == 9;
 	
-	wire[3:0] digit0 = wdata%10;
+	wire[3:0] digit0 = waiting ? userInput%10 :
+							wdata%10;
 	wire digit0_is0 = digit0 == 0;
 	wire digit0_is1 = digit0 == 1;
 	wire digit0_is2 = digit0 == 2;
@@ -211,30 +244,49 @@ module FPGA_main (
 	assign isRecognized = (isAdd | isMul | isCmp | isMovl | isMovh | isMovPC | isJz | isJmp | isJmpAddr | isLd | isSt);			 
 	assign shouldJump = (isJz | isJmp | isJmpAddr);
 	assign shouldChangeReg = (isAdd | isMul | isCmp | isMovl | isMovh | isMovPC | isLd);
-	assign shouldDisplay = (shouldChangeReg & t == 0);
+	assign shouldDisplay = !halt & (shouldChangeReg & t == 0);
 	
 	wire [15:0]nextPC = shouldJump ? out : pc + 1;
 	
-	assign ledr9 = shouldDisplay;
-	assign ledr7 = pc[7];
-	assign ledr6 = pc[6];
-	assign ledr5 = pc[5];
-	assign ledr4 = pc[4];
-	assign ledr3 = pc[3];
-	assign ledr2 = pc[2];
-	assign ledr1 = pc[1];
-	assign ledr0 = pc[0];
+	assign ledr9 = halt ? count[24]  : pc[9];
+	assign ledr8 = halt ? !count[24] : pc[8];
+	assign ledr7 = halt ? count[24]  : pc[7];
+	assign ledr6 = halt ? !count[24] : pc[6];
+	assign ledr5 = halt ? count[24]  : pc[5];
+	assign ledr4 = halt ? !count[24] : pc[4];
+	assign ledr3 = halt ? count[24]  : pc[3];
+	assign ledr2 = halt ? !count[24] : pc[2];
+	assign ledr1 = halt ? count[24]  : pc[1];
+	assign ledr0 = halt ? !count[24] : pc[0];
+	
+	assign ledg7 = halt ? count[24]   : waiting;
+	assign ledg6 = halt ? !count[24]  : waiting;
+	assign ledg5 = halt ? count[24]   : waiting;
+	assign ledg4 = halt ? !count[24]  : waiting;
+	assign ledg3 = halt ? count[24]   : waiting;
+	assign ledg2 = halt ? !count[24]  : waiting;
+	assign ledg1 = halt ? count[24]   : waiting;
+	assign ledg0 = halt ? !count[24]  : waiting;
 
-	always @(posedge clk) begin
-		count <= count + 1;
-		if (pc == 0) pc <= ins;
-		else if (count[26]) begin
-			halt <= !isRecognized;
-			if (halt) $finish;
-			if (shouldChangeReg) rf[t] = wdata;	
-			pc <= nextPC;
-			count <= 0;
+	always @(posedge clk & !waiting) begin
+		if (!halt) begin
+			count <= count + 1;
+			if (pc == 0) pc <= ins;
+			else if (count[26]) begin
+				halt <= !isRecognized;
+				if (shouldChangeReg) rf[t] = wdata;	
+				pc <= nextPC;
+				count <= 0;
+			end
 		end
+		else if (!key3 | !key2 | !key1 | !key0) begin
+			count <= 0;
+			pc <= 0;
+		end
+	end
+	
+	always @(posedge clk & waiting) begin
+		if (!key3 | !key2 | !key1 | !key0) waiting = 0;
 	end
 
 endmodule
