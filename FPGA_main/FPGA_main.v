@@ -1,6 +1,7 @@
 // create module
 module FPGA_main (
 	input wire clk, // 50MHz input clock
+	
 	output wire HEX3_pos0,
 	output wire HEX3_pos1,
 	output wire HEX3_pos2,
@@ -213,7 +214,7 @@ module FPGA_main (
 	
 	wire [15:0]nextPC = shouldJump ? out : pc + 1;
 	
-	assign ledr9 = count[25];
+	assign ledr9 = shouldDisplay;
 	assign ledr7 = pc[7];
 	assign ledr6 = pc[6];
 	assign ledr5 = pc[5];
@@ -223,15 +224,15 @@ module FPGA_main (
 	assign ledr1 = pc[1];
 	assign ledr0 = pc[0];
 
-    always @(posedge clk) begin
+	always @(posedge clk) begin
 		count <= count + 1;
-		if (count[25]) begin
+		if (count[26]) begin
+			halt <= !isRecognized;
+			if (halt) $finish;
+			if (shouldChangeReg) rf[t] = wdata;	
 			pc <= nextPC;
-//			halt <= !isRecognized;
-//			if (halt) $finish;
-//			if (shouldChangeReg) rf[t] = wdata;	
+			count <= 0;
 		end
 	end
-
 
 endmodule
