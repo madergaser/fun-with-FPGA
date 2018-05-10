@@ -279,9 +279,11 @@ module FPGA_main (
 				count <= 0;
 			end
 		end
-		else if (!key3 | !key2 | !key1 | !key0) begin
-			count <= 0;
+		else if (halt & ! (!key3 | !key2 | !key1 | !key0)) count <= count + 1;
+		else begin
+			halt <= 0;
 			pc <= 0;
+			count <= 0;
 		end
 	end
 	
