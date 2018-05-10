@@ -80,7 +80,7 @@ module FPGA_main (
 	wire isCmp = (opcode == 2);
 	
 	wire isMovl = (opcode == 8);
-	
+	wire isMovh = (opcode == 9);
 	wire isMovPC = (opcode == 10);
 
 	wire isJz  = (opcode == 14) & (xop == 0);
@@ -193,6 +193,7 @@ module FPGA_main (
 					 isMul ? ra * rb :
 					 isCmp ? ra == rb :
 				    isMovl ? { {8{ri[7]}}, ri[7:0] } :
+					 isMovh ? (rt & 16'h00ff) | (ri << 8) :
 					 isMovPC ? pc :
 					 isJz  & ra == 0 ? rt :
 					 isJmp ? rt :
@@ -207,9 +208,9 @@ module FPGA_main (
 	assign waddr = ra;		 
 	assign wdata = out;
 
-	assign isRecognized = (isAdd | isMul | isCmp | isMovl | isMovPC | isJz | isJmp | isJmpAddr | isLd | isSt);			 
+	assign isRecognized = (isAdd | isMul | isCmp | isMovl | isMovh | isMovPC | isJz | isJmp | isJmpAddr | isLd | isSt);			 
 	assign shouldJump = (isJz | isJmp | isJmpAddr);
-	assign shouldChangeReg = (isAdd | isMul | isCmp | isMovPC | isMovl | isLd);
+	assign shouldChangeReg = (isAdd | isMul | isCmp | isMovl | isMovh | isMovPC | isLd);
 	assign shouldDisplay = (shouldChangeReg & t == 0);
 	
 	wire [15:0]nextPC = shouldJump ? out : pc + 1;
@@ -226,7 +227,8 @@ module FPGA_main (
 
 	always @(posedge clk) begin
 		count <= count + 1;
-		if (count[26]) begin
+		if (pc == 0) pc <= ins;
+		else if (count[26]) begin
 			halt <= !isRecognized;
 			if (halt) $finish;
 			if (shouldChangeReg) rf[t] = wdata;	
