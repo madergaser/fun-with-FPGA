@@ -1,7 +1,12 @@
 use std::env;
+use std::str;
 use std::fs::File;
 use std::io::prelude::*;
 use std::collections::HashMap;
+
+//Ok so the plan is right now to not have parentheses so I dont need to use a stack
+//Now I can just have a temp variable for each e level that I move the value into.
+//Make an instruction to store the PC in a special PC register
 
 const ELSE: u8 = 0;
 const END: u8 = 1;
@@ -31,7 +36,8 @@ struct Token {
 struct Interpreter_State {
   curr_token: Token,
   table: HashMap<Vec<u8>, u64>,
-  input: Vec<u8>
+  input: Vec<u8>,
+  tag_count: u64
 }
 
 
@@ -163,77 +169,103 @@ fn is_space(check: u8) -> bool {
       check <= 0x0d);
 }
 
-fn e1(state: &mut Interpreter_State) -> u64 {
-  if peek(state) == LEFT {
-    consume(state);
-    let v = expression(state);
-    if peek(state) != RIGHT {
-      println!("1ERROR");
-    }
-    consume(state);
-    return v;
-  } else if peek(state) == INT {
+fn e1(state: &mut Interpreter_State, outfile: &mut File, doit: bool) {
+  //if peek(state) == LEFT {
+  //  consume(state);
+  //  let v = expression(state);
+  //  if peek(state) != RIGHT {
+  //    println!("1ERROR");
+  //  }
+  //  consume(state);
+  //  return v;
+  //} else 
+  if peek(state) == INT {
     let v = get_int(state);
     consume(state);
-    return v;
+    if doit {
+      outfile.write_fmt(format_args!("movl r1,{}\n",v % 256));
+      outfile.write_fmt(format_args!("movh r1,{}\n",v / 256));
+    }
   } else if peek(state) == ID {
     let id = get_id(state).to_vec();
     consume(state);
     let res = state.table.get(&id);
-    if res.is_some() {
-      return *res.unwrap();
-    } else {
-      return 0;
+    if doit {
+      if res.is_some() {
+        let v = *res.unwrap();
+        outfile.write_fmt(format_args!("movl r1,{}\n",v % 256));
+        outfile.write_fmt(format_args!("movh r1,{}\n",v / 256));
+        //ld r1,r1
+        outfile.write_fmt(format_args!("ld r1,r1\n"));
+      } else {
+        //movl r1, 0
+        outfile.write_fmt(format_args!("movl r1,{}\n",0));
+        outfile.write_fmt(format_args!("movh r1,{}\n",0));
+      }
     }
   } else if peek(state) == FUN {
     let v = state.curr_token.start_in as u64;
     consume(state);
-    statement(state, false);
-    return v;
+    statement(state, false, outfile);
+    if doit {
+      outfile.write_fmt(format_args!("movh r1,$F{}\n",v));
+      outfile.write_fmt(format_args!("movl r1,$F{}\n",v));
+    }
   } else {
     println!("2ERROR | start: {}, end: {}, type: {}",
         state.curr_token.start_in, state.curr_token.end_in,
         state.curr_token.kind);
-    return 0;
   }
 }
 
-fn e2(state: &mut Interpreter_State) -> u64 {
-  let mut value = e1(state);
+fn e2(state: &mut Interpreter_State, outfile: &mut File, doit: bool) {
+  e1(state, outfile, doit);
+  if doit {
+    outfile.write_fmt(format_args!("add r2,r0,r1\n"));
+  }
   while peek(state) == MUL {
     consume(state);
-    value = value * e1(state);
-  }
-  return value;
-}
-
-fn e3(state: &mut Interpreter_State) -> u64 {
-  let mut value = e2(state);
-  while peek(state) == PLUS {
-    consume(state);
-    value = value + e2(state);
-  }
-  return value;
-}
-
-fn e4(state: &mut Interpreter_State) -> u64 {
-  let mut value = e3(state);
-  while peek(state) == EQEQ {
-    consume(state);
-    if value == e3(state) {
-      value = 1;
-    } else {
-      value = 0;
+    //value = value * e1(state);
+    e1(state, outfile, doit);
+    if doit {
+      outfile.write_fmt(format_args!("mul r2,r1,r2\n"));
     }
   }
-  return value;
 }
 
-fn expression (state: &mut Interpreter_State) -> u64 {
-  return e4(state);
+fn e3(state: &mut Interpreter_State, outfile: &mut File, doit: bool) {
+  e2(state, outfile, doit);
+  if doit {
+    outfile.write_fmt(format_args!("add r3,r0,r2\n"));
+  }
+  while peek(state) == PLUS {
+    consume(state);
+    //value = value + e2(state);
+    e2(state, outfile, doit);
+    if doit {
+      outfile.write_fmt(format_args!("add r3,r2,r3\n"));
+    }
+  }
 }
 
-fn statement(state: &mut Interpreter_State, doit:bool) -> bool {
+fn e4(state: &mut Interpreter_State, outfile: &mut File, doit: bool) {
+  e3(state, outfile, doit);
+  if doit {
+    outfile.write_fmt(format_args!("add r4,r0,r3\n"));
+  }
+  while peek(state) == EQEQ {
+    consume(state);
+    if doit {
+      outfile.write_fmt(format_args!("cmp r4,r4,r3\n"));
+    }
+  }
+}
+
+fn expression (state: &mut Interpreter_State, outfile: &mut File, doit: bool) {
+  e4(state, outfile, doit);
+}
+
+fn statement(state: &mut Interpreter_State, doit:bool, outfile: &mut File) -> bool {
   match peek(state) {
     ID => {
       let id = get_id(state).to_vec();
@@ -243,9 +275,11 @@ fn statement(state: &mut Interpreter_State, doit:bool) -> bool {
         return false;
       } else if temp_k == EQ {
         consume(state);
-        let v = expression(state);
+        expression(state, outfile, doit);
         if doit {
-          state.table.insert(id, v);
+          outfile.write_fmt(format_args!("movl r5,${}\n", str::from_utf8(&id).unwrap()));
+          outfile.write_fmt(format_args!("movh r5,${}\n", str::from_utf8(&id).unwrap()));
+          outfile.write_fmt(format_args!("st r4,r5\n"));
         }
       } else if temp_k == LEFT {
         //println!("function call!!!");
@@ -255,14 +289,19 @@ fn statement(state: &mut Interpreter_State, doit:bool) -> bool {
         }
         consume(state);
         if doit {
-          let prevstart = state.curr_token.start_in;
-          let prevend = state.curr_token.end_in;
-          state.curr_token.start_in = *state.table.get(&id).unwrap() as usize;
-          state.curr_token.end_in = state.curr_token.start_in + 3;
-          consume(state);
-          statement(state, doit);
-          state.curr_token.start_in = prevstart;
-          state.curr_token.end_in = prevend;
+          //let prevstart = state.curr_token.start_in;
+          //let prevend = state.curr_token.end_in;
+          //state.curr_token.start_in = *state.table.get(&id).unwrap() as usize;
+          //state.curr_token.end_in = state.curr_token.start_in + 3;
+          //consume(state);
+          //statement(state, doit);
+          //state.curr_token.start_in = prevstart;
+          //state.curr_token.end_in = prevend;
+          outfile.write_fmt(format_args!("movl r5,${}\n", str::from_utf8(&id).unwrap()));
+          outfile.write_fmt(format_args!("movh r5,${}\n", str::from_utf8(&id).unwrap()));
+          outfile.write_fmt(format_args!("ld r5,r5\n"));
+          outfile.write_fmt(format_args!("movpc r7\n"));
+          outfile.write_fmt(format_args!("jmp r5\n"));
         }
       } else {
         println!("4ERROR | start: {}, end: {}, type: {}, doit: {}",
@@ -277,7 +316,7 @@ fn statement(state: &mut Interpreter_State, doit:bool) -> bool {
     }
     LBRACE => {
       consume(state);
-      seq(state, doit);
+      seq(state, doit, outfile);
       if peek(state) != RBRACE {
         println!("5ERROR");
       }
@@ -286,31 +325,62 @@ fn statement(state: &mut Interpreter_State, doit:bool) -> bool {
       //println!("{}", state.curr_token.kind);
       return true;
     }
+    //TODO: NESTING FOR IFS
     IF => {
       consume(state);
-      let temp: u64 = expression(state);
-      statement(state, doit && temp != 0);
+      expression(state, outfile, doit);
+      let temp_tag_count = state.tag_count;
+      if doit {
+        state.tag_count = state.tag_count + 1;
+        outfile.write_fmt(format_args!("jzn r4\n"));
+        outfile.write_fmt(format_args!("$ELSE{}\n", temp_tag_count));
+      }
+      statement(state, doit, outfile);
+      if doit {
+        outfile.write_fmt(format_args!("jzn r0\n"));
+        outfile.write_fmt(format_args!("$DONE{}\n", temp_tag_count));
+        outfile.write_fmt(format_args!("ELSE{}:\n", temp_tag_count));
+      }
       let tempKind = peek(state);
       if tempKind == SEMI {
         consume(state);
       }
       if tempKind == ELSE {
         consume(state);
-        statement(state, doit && temp == 0);
+        statement(state, doit, outfile);
+      }
+      if doit {
+        outfile.write_fmt(format_args!("DONE{}:\n", temp_tag_count));
       }
       return true;
     }
     WHILE => {
       consume(state);
-      let start = state.curr_token.start_in;
-      let end = state.curr_token.end_in;
-      while expression(state) != 0 && doit {
-        statement(state, true);
-        state.curr_token.start_in = start;
-        state.curr_token.end_in = end;
-        peek(state);
+      //let start = state.curr_token.start_in;
+      //let end = state.curr_token.end_in;
+      let temp_tag_count = state.tag_count;
+      if doit {
+        state.tag_count = state.tag_count + 1;
+        outfile.write_fmt(format_args!("WHILE{}:\n", temp_tag_count));
       }
-      statement(state, false);
+      expression(state, outfile, doit);
+      if doit {
+        outfile.write_fmt(format_args!("jzn r4\n"));
+        outfile.write_fmt(format_args!("$DONE{}\n", temp_tag_count));
+      }
+      statement(state, doit, outfile);
+      if doit {
+        outfile.write_fmt(format_args!("jzn r0\n"));
+        outfile.write_fmt(format_args!("$WHILE{}\n", temp_tag_count));
+        outfile.write_fmt(format_args!("DONE{}:\n", temp_tag_count));
+      }
+      //while expression(state) != 0 && doit {
+      //  statement(state, true);
+      //  state.curr_token.start_in = start;
+      //  state.curr_token.end_in = end;
+      //  peek(state);
+      //}
+      statement(state, false, outfile);
       return true;
     }
     PRINT => {
@@ -319,12 +389,9 @@ fn statement(state: &mut Interpreter_State, doit:bool) -> bool {
       if peek(state) == SEMI {
         return true;
       }
+      expression(state, outfile, doit);
       if doit {
-        //println!("Really should be printing!");
-        println!("{}", expression(state));
-        //println!("Should be done printing!");
-      } else {
-        expression(state);
+        outfile.write_fmt(format_args!("add r0,r4,r0\n"));
       }
       return true;
     }
@@ -343,17 +410,48 @@ fn statement(state: &mut Interpreter_State, doit:bool) -> bool {
   }
 }
 
-fn seq(state: &mut Interpreter_State, doit: bool) {
-  while statement(state, doit){
-    //println!("haha");
-  }
+fn seq(state: &mut Interpreter_State, doit: bool, outfile: &mut File) {
+  while statement(state, doit, outfile){}
 }
 
-fn program(state: &mut Interpreter_State) {
-  seq(state, true);
+fn program(state: &mut Interpreter_State, outfile: &mut File) {
+  seq(state, true, outfile);
   if peek(state) != END {
     println!("failed!");
   }
+}
+
+fn variables(state: &mut Interpreter_State, outfile: &mut File) {
+  state.curr_token = Token{kind: NONE, start_in: 0, end_in: 0};
+  outfile.write_fmt(format_args!(".DATA\n"));
+  while peek(state) != END {
+    if peek(state) == ID &&
+      !state.table.contains_key(&get_id(state).to_vec()) {
+      let te = &get_id(state).to_vec();
+      state.table.insert(te.to_vec(), 0);
+      outfile.write_fmt(format_args!("{}:0\n", str::from_utf8(&get_id(state).to_vec()).unwrap()));
+    }
+  }
+  state.curr_token = Token{kind: NONE, start_in: 0, end_in: 0};
+}
+
+fn functions(state: &mut Interpreter_State, outfile: &mut File) {
+  state.curr_token = Token{kind: NONE, start_in: 0, end_in: 0};
+  outfile.write_fmt(format_args!(".FUNCTIONS\n"));
+  while peek(state) != END {
+    if peek(state) == FUN {
+      let prev_start = state.curr_token.start_in;
+      let prev_end = state.curr_token.end_in;
+      outfile.write_fmt(format_args!("F{}:\n", prev_start));
+      consume(state);
+      statement(state, true, outfile);
+      state.curr_token.start_in = prev_start;
+      state.curr_token.end_in = prev_end;
+      outfile.write_fmt(format_args!("jmpa r7,4\n"));
+    }
+    consume(state);
+  }
+  state.curr_token = Token{kind: NONE, start_in: 0, end_in: 0};
 }
 
 fn main() {
@@ -361,6 +459,7 @@ fn main() {
   let filename = &args[1];
   
   let mut f = File::open(filename).expect("File not found.");
+  let mut outfile = File::create("output.mif").unwrap();
 
   let mut all_content = String::new();
   f.read_to_string(&mut all_content)
@@ -369,8 +468,20 @@ fn main() {
   let mut state = Interpreter_State {
     curr_token: Token{kind: NONE, start_in: 0, end_in: 0},
     table: HashMap::new(),
-    input: all_content.into_bytes()
+    input: all_content.into_bytes(),
+    tag_count: 0
   };
+
+  variables(&mut state, &mut outfile);
+  functions(&mut state, &mut outfile);
+  outfile.write_fmt(format_args!(".MAIN\n"));
+  
+  //outfile.write_fmt(format_args!("{:04x}\n", varCount));
+  //let tempCount = 2;
+  //while tempCount < varCount {
+  //  outfile.write_fmt(format_args!("{:04x}\n", 0));
+  //  let tempCount = tempCount + 2;
+  //}
 
   //let v1 = vec!(1, 2, 3, 4, 5);
   //let v2 = vec!(1, 2, 3);
@@ -382,5 +493,5 @@ fn main() {
 
   //println!("Text: \n{:?}\n{}", state.input, state.input.len());
 
-  program(&mut state);
+  program(&mut state, &mut outfile);
 }
