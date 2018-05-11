@@ -1,62 +1,107 @@
 $MAIN
 .DATA
+jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj:0
 x:0
 y:0
+z:0
+cool:0
+sub1:0
+zip:0
+u:0
+o:0
+n:0
 .FUNCTIONS
-F4:
-movl r1,0
+F1054:
+movl r1,200
 movh r1,0
-ld r1,r1
 add r2,r0,r1
 add r3,r0,r2
 add r4,r0,r3
 add r0,r4,r0
-movl r1,0
-movh r1,0
-ld r1,r1
+movh r1,$F1078
+movl r1,$F1078
 add r2,r0,r1
 add r3,r0,r2
-movl r1,1
-movh r1,0
-add r2,r0,r1
-add r3,r2,r3
 add r4,r0,r3
 movl r5,$y
 movh r5,$y
 st r4,r5
-movh r1,$F45
-movl r1,$F45
+jmpa r7,4
+F1078:
+movl r1,17
+movh r1,0
 add r2,r0,r1
 add r3,r0,r2
 add r4,r0,r3
-movl r5,$x
-movh r5,$x
+add r0,r4,r0
+movh r1,$F1105
+movl r1,$F1105
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+movl r5,$z
+movh r5,$z
 st r4,r5
 jmpa r7,4
-F45:
-movl r1,100
-movh r1,22
+F1105:
+movl r1,222
+movh r1,0
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+add r0,r4,r0
+movh r1,$F1140
+movl r1,$F1140
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+movl r5,$cool
+movh r5,$cool
+st r4,r5
+jmpa r7,4
+F1140:
+movl r1,9
+movh r1,3
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+add r0,r4,r0
+jmpa r7,4
+F1312:
+movl r1,43
+movh r1,2
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+movl r5,$zip
+movh r5,$zip
+st r4,r5
+jmpa r7,4
+F1397:
+movl r1,0
+movh r1,0
+ld r1,r1
 add r2,r0,r1
 add r3,r0,r2
 add r4,r0,r3
 add r0,r4,r0
 jmpa r7,4
 .MAIN
-movh r1,$F4
-movl r1,$F4
+movl r1,168
+movh r1,399
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+movl r5,$jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
+movh r5,$jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
+st r4,r5
+movh r1,$F1054
+movl r1,$F1054
 add r2,r0,r1
 add r3,r0,r2
 add r4,r0,r3
 movl r5,$x
 movh r5,$x
-st r4,r5
-movl r1,232
-movh r1,3
-add r2,r0,r1
-add r3,r0,r2
-add r4,r0,r3
-movl r5,$y
-movh r5,$y
 st r4,r5
 movl r5,$x
 movh r5,$x
@@ -69,7 +114,194 @@ ld r1,r1
 add r2,r0,r1
 add r3,r0,r2
 add r4,r0,r3
+jzn r4
+$ELSE0
+movl r5,$x
+movh r5,$x
+ld r5,r5
+movpc r7
+jmp r5
+movl r1,0
+movh r1,0
+ld r1,r1
+add r2,r0,r1
+add r3,r0,r2
+movl r1,1
+movh r1,0
+add r2,r0,r1
+add r3,r2,r3
+add r4,r0,r3
+movl r5,$x
+movh r5,$x
+st r4,r5
+jzn r0
+$DONE0
+ELSE0:
+movl r1,123
+movh r1,0
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
 add r0,r4,r0
+DONE0:
+movl r1,255
+movh r1,72057594037927935
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+movl r5,$sub1
+movh r5,$sub1
+st r4,r5
+movh r1,$F1312
+movl r1,$F1312
+add r2,r0,r1
+add r3,r0,r2
+movl r1,1
+movh r1,0
+add r2,r0,r1
+add r3,r2,r3
+add r4,r0,r3
+movl r5,$y
+movh r5,$y
+st r4,r5
+movl r1,0
+movh r1,0
+ld r1,r1
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+add r0,r4,r0
+WHILE1:
+movl r1,0
+movh r1,0
+ld r1,r1
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+jzn r4
+$DONE1
+movl r1,97
+movh r1,4821154
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+movl r5,$o
+movh r5,$o
+st r4,r5
+jzn r0
+$WHILE1
+DONE1:
+movh r1,$F1397
+movl r1,$F1397
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+movl r5,$y
+movh r5,$y
+st r4,r5
+movl r1,0
+movh r1,0
+ld r1,r1
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+movl r5,$x
+movh r5,$x
+st r4,r5
+movl r5,$x
+movh r5,$x
+ld r5,r5
+movpc r7
+jmp r5
+movl r5,$y
+movh r5,$y
+ld r5,r5
+movpc r7
+jmp r5
+movl r1,10
+movh r1,0
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+movl r5,$n
+movh r5,$n
+st r4,r5
+WHILE2:
+movl r1,0
+movh r1,0
+ld r1,r1
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+jzn r4
+$DONE2
+movl r1,0
+movh r1,0
+ld r1,r1
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+add r0,r4,r0
+movl r1,0
+movh r1,0
+ld r1,r1
+add r2,r0,r1
+add r3,r0,r2
+movl r1,0
+movh r1,0
+ld r1,r1
+add r2,r0,r1
+add r3,r2,r3
+add r4,r0,r3
+movl r5,$n
+movh r5,$n
+st r4,r5
+jzn r0
+$WHILE2
+DONE2:
+movl r5,$x
+movh r5,$x
+ld r5,r5
+movpc r7
+jmp r5
+movl r5,$y
+movh r5,$y
+ld r5,r5
+movpc r7
+jmp r5
+WHILE3:
+movl r1,0
+movh r1,0
+ld r1,r1
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+jzn r4
+$DONE3
+movl r1,0
+movh r1,0
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+movl r5,$y
+movh r5,$y
+st r4,r5
+jzn r0
+$WHILE3
+DONE3:
+movl r1,0
+movh r1,0
+ld r1,r1
+add r2,r0,r1
+add r3,r0,r2
+movl r1,1
+movh r1,0
+add r2,r0,r1
+add r3,r2,r3
+add r4,r0,r3
+movl r5,$n
+movh r5,$n
+st r4,r5
 movl r5,$x
 movh r5,$x
 ld r5,r5

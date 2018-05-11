@@ -14,9 +14,9 @@ x = fun {
 
 x()
 
-if (
+if 
     x
-   )
+   
 {
   x()
 
@@ -28,13 +28,13 @@ else {
 
 sub1 = 1______________8_446_7__4___4_073_7__09_551_61___5
 
-y = (fun {
+y = fun {
     zip = 555
-    }) + 1
+    } + 1
 
 print zip
 
-while (u) {
+while u {
   o = 1234215521
 }
 
@@ -48,7 +48,7 @@ y()
 
 n = 10
 
-while (n) {
+while n {
   print n
   n = n + sub1
 }
@@ -59,7 +59,7 @@ x()
 y(
     )
 
-while (y) {
+while y {
   y = 0
 }
 
