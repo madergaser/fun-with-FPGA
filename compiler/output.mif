@@ -1,0 +1,77 @@
+$MAIN
+.DATA
+x:0
+y:0
+.FUNCTIONS
+F4:
+movl r1,0
+movh r1,0
+ld r1,r1
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+add r0,r4,r0
+movl r1,0
+movh r1,0
+ld r1,r1
+add r2,r0,r1
+add r3,r0,r2
+movl r1,1
+movh r1,0
+add r2,r0,r1
+add r3,r2,r3
+add r4,r0,r3
+movl r5,$y
+movh r5,$y
+st r4,r5
+movh r1,$F45
+movl r1,$F45
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+movl r5,$x
+movh r5,$x
+st r4,r5
+jmpa r7,4
+F45:
+movl r1,100
+movh r1,22
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+add r0,r4,r0
+jmpa r7,4
+.MAIN
+movh r1,$F4
+movl r1,$F4
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+movl r5,$x
+movh r5,$x
+st r4,r5
+movl r1,232
+movh r1,3
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+movl r5,$y
+movh r5,$y
+st r4,r5
+movl r5,$x
+movh r5,$x
+ld r5,r5
+movpc r7
+jmp r5
+movl r1,0
+movh r1,0
+ld r1,r1
+add r2,r0,r1
+add r3,r0,r2
+add r4,r0,r3
+add r0,r4,r0
+movl r5,$x
+movh r5,$x
+ld r5,r5
+movpc r7
+jmp r5
