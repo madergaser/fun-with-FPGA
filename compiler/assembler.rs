@@ -475,7 +475,7 @@ fn main() {
   let filename = &args[1];
   
   let mut f = File::open(filename).expect("File not found.");
-  let mut outfile = File::create("output.mif").unwrap();
+  let mut outfile = File::create("output.s").unwrap();
 
   let mut all_content = String::new();
   f.read_to_string(&mut all_content)
