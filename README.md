@@ -10,7 +10,7 @@ This project consists of a Rust compiler which will compile the fun language int
 
 * Lexical rules: the language has the following tokens:
 
-  - keywords: `"if" "else" "while" and "print"`
+  - keywords: `"if" "else" "while" "fun"` and `"print"`
   - operators and special characters: `= == ( ) { } + *`
   - identifiers: start with lower case letters followed by a sequence of lower case letters and numbers.
   - immediate values: sequences of digits representing integers. They always start with a digit but could contain `_` characters that are ignored
@@ -30,3 +30,5 @@ This project consists of a Rust compiler which will compile the fun language int
 * The `while` statement has the form: `while <exp> <statement>`
 * `{ }` is used to block statements, making a sequence of statements appear like a single one
 * The `print` statement has the form: `print <exp>` and prints the numerical value of the expression followed by a new line
+* The `fun` expression is of this form: `fun <statement>` and returns an opaque 64-bit quantity that can be used to specify a function
+* A function can be called by: `<identifier> ()` where the identifier contains a value returned by `"fun"`
