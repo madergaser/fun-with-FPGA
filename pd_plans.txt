@@ -5,11 +5,11 @@
   1001iiiiiiiitttt  movh rt,i     regs[t] = (regs[t] & 0xff) | (i << 8)
   1010xxxxxxxxtttt  movpc rt      regs[t] = pc;
 
-  1110aaaa0000tttt  jz rt,ra      pc = (regs[ra] == 0) ? regs[rt] : pc + 2
-  1110aaaa0001tttt  jmp rt	  pc = regs[rt]
-  1110aaaa0010tttt  jmpa rt   pc = regs[t] + a
+  1110aaaa0000tttt  jz rt,ra      pc = (regs[a] == 0) ? regs[t] : pc + 1
+  1110aaaa0001tttt  jmp rt	      pc = regs[t]
+  1110aaaa0010tttt  jmpa rt       pc = regs[t] + a
   
-  1110aaaa11111111  jzn ra        pc = regs[ra] == 0 ? mem[pc+2] : pc + 4
+  1110aaaa11111111  jzn ra        pc = regs[a] == 0 ? mem[pc+1] : pc + 2
   xxxxxxxxxxxxxxxx
 
   1111aaaa0000tttt  ld rt,ra      regs[t] = mem[regs[a]]
@@ -17,6 +17,6 @@
 
   0010aaaabbbbtttt  cmp rt,ra,rb  regs[t] = regs[a] == regs[b] ? 1 : 0
 
-  regs[t] will hold the final result of any expression i.e. 10, x == y, val1 + 10*val2
-  regs[a], regs[b] used mid-expression
+  011100000000tttt  in rt         regs[t] = INPUT
+  
   regs[0] used for printing
