@@ -26,6 +26,7 @@ const RIGHT: u8 = 14;
 const SEMI: u8 = 15;
 const WHILE: u8 = 16;
 const FUN: u8 = 17;
+const IN: u8 = 18;
 
 struct Token {
   kind: u8,
@@ -80,6 +81,8 @@ fn peek(state: &mut Interpreter_State) -> u8 {
         ans = WHILE;
       } else if (String::from("print").into_bytes()) == slice {
         ans = PRINT;
+      } else if (String::from("_IN_").into_bytes()) == slice {
+        ans = IN;
       } else {
         ans = ID;
       }
@@ -113,6 +116,11 @@ fn consume(state: &mut Interpreter_State) {
     }
   } else if isLower(state.input[state.curr_token.start_in]) {
     while !issoftend(state) && isAlNum(state.input[state.curr_token.end_in]) {
+      state.curr_token.end_in = state.curr_token.end_in + 1;
+    }
+  } else if state.input[state.curr_token.start_in] == b'_' {
+    while !issoftend(state) && (isAlNum(state.input[state.curr_token.end_in]) ||
+        state.input[state.curr_token.end_in] == b'_') {
       state.curr_token.end_in = state.curr_token.end_in + 1;
     }
   }
@@ -210,6 +218,11 @@ fn e1(state: &mut Interpreter_State, outfile: &mut File, doit: bool) {
     if doit {
       outfile.write_fmt(format_args!("movh r1,$F{}\n",v));
       outfile.write_fmt(format_args!("movl r1,$F{}\n",v));
+    }
+  } else if peek(state) == IN {
+    consume (state);
+    if doit {
+      outfile.write_fmt(format_args!("in r1\n"));
     }
   } else {
     println!("2ERROR | start: {}, end: {}, type: {}",
