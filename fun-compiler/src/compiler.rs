@@ -295,5 +295,6 @@ fn main() {
       }
     }
   }
+  out_file.write_fmt(format_args!("ffff"));
   /* END: resolve ISA tags */
 }
