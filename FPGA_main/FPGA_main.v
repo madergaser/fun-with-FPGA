@@ -234,7 +234,7 @@ module FPGA_main (
 					 isInput ? userInput :
 					 isCmp ? ra == rb :
 				    isMovl ? { {8{ri[7]}}, ri[7:0] } :
-					 isMovh ? (rt & 16'h00ff) | (ri << 8) :
+					 isMovh ? { {ri[7:0]}, {rt[7:0]}} :
 					 isMovPC ? pc :
 					 isJz  & ra == 0 ? rt :
 					 isJzn & ra == 0 ? raData :
