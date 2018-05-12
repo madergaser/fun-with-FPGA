@@ -1,0 +1,6 @@
+[package]
+name = "fun-compiler"
+version = "0.1.0"
+authors = ["madergaser <madergaser10@gmail.com>"]
+
+[dependencies]
