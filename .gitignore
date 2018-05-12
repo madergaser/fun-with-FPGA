@@ -1,2 +1,5 @@
 compiler/main
 *.mif
+*.s
+compiler/assembler
+compiler/compiler
