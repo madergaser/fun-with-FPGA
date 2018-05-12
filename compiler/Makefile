@@ -7,17 +7,17 @@ comp : compiler.rs Makefile
 	rustc $(RSFLAGS) -o compiler compiler.rs
 
 TESTS=$(sort $(wildcard *.fun))
-RUNS=$(patsubst %.fun,%.hex,$(TESTS))
+RUNS=$(patsubst %.fun,%.mif,$(TESTS))
 
 test : $(RUNS)
 
-$(RUNS) : %.hex : %.fun Makefile assembler
+$(RUNS) : %.mif : %.fun Makefile assem comp
 	@./assembler $*.fun
 	@./compiler
-	@mv output.hex $*.hex
+	@mv output.mif $*.mif
 
 clean :
-	rm -f *.hex
+	rm -f *.mif
 	rm -f compiler
 	rm -f assembler
 	rm -f *.s
