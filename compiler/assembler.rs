@@ -26,6 +26,7 @@ const RIGHT: u8 = 14;
 const SEMI: u8 = 15;
 const WHILE: u8 = 16;
 const FUN: u8 = 17;
+const IN: u8 = 18;
 
 struct Token {
   kind: u8,
@@ -80,6 +81,8 @@ fn peek(state: &mut Interpreter_State) -> u8 {
         ans = WHILE;
       } else if (String::from("print").into_bytes()) == slice {
         ans = PRINT;
+      } else if (String::from("_IN_").into_bytes()) == slice {
+        ans = IN;
       } else {
         ans = ID;
       }
@@ -113,6 +116,11 @@ fn consume(state: &mut Interpreter_State) {
     }
   } else if isLower(state.input[state.curr_token.start_in]) {
     while !issoftend(state) && isAlNum(state.input[state.curr_token.end_in]) {
+      state.curr_token.end_in = state.curr_token.end_in + 1;
+    }
+  } else if state.input[state.curr_token.start_in] == b'_' {
+    while !issoftend(state) && (isAlNum(state.input[state.curr_token.end_in]) ||
+        state.input[state.curr_token.end_in] == b'_') {
       state.curr_token.end_in = state.curr_token.end_in + 1;
     }
   }
@@ -210,6 +218,11 @@ fn e1(state: &mut Interpreter_State, outfile: &mut File, doit: bool) {
     if doit {
       outfile.write_fmt(format_args!("movh r1,$F{}\n",v));
       outfile.write_fmt(format_args!("movl r1,$F{}\n",v));
+    }
+  } else if peek(state) == IN {
+    consume (state);
+    if doit {
+      outfile.write_fmt(format_args!("in r1\n"));
     }
   } else {
     println!("2ERROR | start: {}, end: {}, type: {}",
@@ -422,6 +435,7 @@ fn program(state: &mut Interpreter_State, outfile: &mut File) {
 }
 
 fn variables(state: &mut Interpreter_State, outfile: &mut File) {
+  println!("Writing variables!");
   state.curr_token = Token{kind: NONE, start_in: 0, end_in: 0};
   outfile.write_fmt(format_args!(".DATA\n"));
   while peek(state) != END {
@@ -431,11 +445,13 @@ fn variables(state: &mut Interpreter_State, outfile: &mut File) {
       state.table.insert(te.to_vec(), 0);
       outfile.write_fmt(format_args!("{}:0\n", str::from_utf8(&get_id(state).to_vec()).unwrap()));
     }
+    consume(state);
   }
   state.curr_token = Token{kind: NONE, start_in: 0, end_in: 0};
 }
 
 fn functions(state: &mut Interpreter_State, outfile: &mut File) {
+  println!("Writing functions!");
   state.curr_token = Token{kind: NONE, start_in: 0, end_in: 0};
   outfile.write_fmt(format_args!(".FUNCTIONS\n"));
   while peek(state) != END {
@@ -459,7 +475,7 @@ fn main() {
   let filename = &args[1];
   
   let mut f = File::open(filename).expect("File not found.");
-  let mut outfile = File::create("output.mif").unwrap();
+  let mut outfile = File::create("output.s").unwrap();
 
   let mut all_content = String::new();
   f.read_to_string(&mut all_content)
@@ -471,7 +487,10 @@ fn main() {
     input: all_content.into_bytes(),
     tag_count: 0
   };
+  
+  println!("Writing files!");
 
+  outfile.write_fmt(format_args!("$MAIN\n"));
   variables(&mut state, &mut outfile);
   functions(&mut state, &mut outfile);
   outfile.write_fmt(format_args!(".MAIN\n"));
