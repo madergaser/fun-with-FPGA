@@ -200,9 +200,8 @@ fn e1(state: &mut Interpreter_State, outfile: &mut File, doit: bool) {
     let res = state.table.get(&id);
     if doit {
       if res.is_some() {
-        let v = *res.unwrap();
-        outfile.write_fmt(format_args!("movl r1,{}\n",v % 256));
-        outfile.write_fmt(format_args!("movh r1,{}\n",v / 256));
+        outfile.write_fmt(format_args!("movl r1,${}\n",str::from_utf8(&id).unwrap()));
+        outfile.write_fmt(format_args!("movh r1,${}\n",str::from_utf8(&id).unwrap()));
         //ld r1,r1
         outfile.write_fmt(format_args!("ld r1,r1\n"));
       } else {
