@@ -108,6 +108,8 @@ module FPGA_main (
 	
 	wire isCmp = (opcode == 2);
 	
+	wire isInput = (opcode == 7);
+	
 	wire isMovl = (opcode == 8);
 	wire isMovh = (opcode == 9);
 	wire isMovPC = (opcode == 10);
@@ -229,6 +231,7 @@ module FPGA_main (
 	// rhs of op
 	wire [15:0]out = isAdd  ? ra + rb :
 					 isMul ? ra * rb :
+					 isInput ? userInput :
 					 isCmp ? ra == rb :
 				    isMovl ? { {8{ri[7]}}, ri[7:0] } :
 					 isMovh ? (rt & 16'h00ff) | (ri << 8) :
@@ -248,13 +251,15 @@ module FPGA_main (
 	assign waddr = ra;		 
 	assign wdata = out;
 
-	assign isRecognized = (isAdd | isMul | isCmp | isMovl | isMovh | isMovPC | isJz | isJmp | isJmpAddr | isJzn | isLd | isSt);			 
+	assign isRecognized = (isAdd | isMul | isCmp | isInput | isMovl | isMovh | isMovPC | isJz | isJmp | isJmpAddr | isJzn | isLd | isSt);			 
 	assign shouldJump = (isJz | isJmp | isJmpAddr | isJzn);
-	assign shouldChangeReg = (isAdd | isMul | isCmp | isMovl | isMovh | isMovPC | isLd);
+	assign shouldChangeReg = (isAdd | isMul | isCmp | isInput | isMovl | isMovh | isMovPC | isLd);
 	assign shouldDisplay = !halt & (shouldChangeReg & t == 0);
 	
 	wire [15:0]nextPC = shouldJump ? out : pc + 1;
 	
+	// Red leds display the bottom 8 bits (in binary) as the program runs.
+	// If halted, the lights alternate on/off
 	assign ledr9 = halt ? count[24]  : pc[9];
 	assign ledr8 = halt ? !count[24] : pc[8];
 	assign ledr7 = halt ? count[24]  : pc[7];
@@ -266,6 +271,8 @@ module FPGA_main (
 	assign ledr1 = halt ? count[24]  : pc[1];
 	assign ledr0 = halt ? !count[24] : pc[0];
 	
+	// Green leds all turn on when user input is required.
+	// If halted, the lights alternate on/off
 	assign ledg7 = halt ? count[24]   : waiting;
 	assign ledg6 = halt ? !count[24]  : waiting;
 	assign ledg5 = halt ? count[24]   : waiting;
@@ -275,27 +282,30 @@ module FPGA_main (
 	assign ledg1 = halt ? count[24]   : waiting;
 	assign ledg0 = halt ? !count[24]  : waiting;
 
-	always @(posedge clk & !waiting) begin
-		if (!halt) begin
+	always @(posedge clk) begin
+		if (waiting) begin			// waiting for user input
+			if (!key3 | !key2 | !key1 | !key0) waiting = 0;
+		end
+		
+		else if (!halt) begin		// runs program
 			count <= count + 1;
 			if (pc == 0) pc <= ins;
 			else if (count[26]) begin
 				halt <= !isRecognized;
+				waiting <= isInput;
 				if (shouldChangeReg) rf[t] = wdata;	
 				pc <= nextPC;
 				count <= 0;
 			end
 		end
-		else if (halt & ! (!key3 | !key2 | !key1 | !key0)) count <= count + 1;
-		else begin
+		
+		else if (key3 & key2 & key1 & key0) count <= count + 1;	// increments count after halt
+		
+		else begin						// restarts program only when halted and a button is pressed
 			halt <= 0;
 			pc <= 0;
 			count <= 0;
 		end
-	end
-	
-	always @(posedge clk & waiting) begin
-		if (!key3 | !key2 | !key1 | !key0) waiting = 0;
 	end
 
 endmodule
