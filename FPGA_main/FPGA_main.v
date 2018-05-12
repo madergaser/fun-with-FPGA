@@ -80,6 +80,8 @@ module FPGA_main (
 	 
     // read from memory
     wire [15:0]ins;
+	 wire ren;
+	 wire [15:0]nextIns;
 
 	// write to memory
 	wire en;
@@ -113,9 +115,12 @@ module FPGA_main (
 	wire isJz  = (opcode == 14) & (xop == 0);
 	wire isJmp = (opcode == 14) & (xop == 1);
 	wire isJmpAddr = (opcode == 14) & (xop == 2);
+	wire isJzn = (opcode == 14) & (xop == 15);
 
 	wire isLd = (opcode == 15) & (xop == 0);
 	wire isSt = (opcode == 15) & (xop == 1);
+	
+	assign ren = isJzn;
 
 	// get operands
 	wire [3:0]a = ins[11:8];
@@ -229,20 +234,22 @@ module FPGA_main (
 					 isMovh ? (rt & 16'h00ff) | (ri << 8) :
 					 isMovPC ? pc :
 					 isJz  & ra == 0 ? rt :
+					 isJzn & ra == 0 ? raData :
+					 isJzn & ra != 0 ? pc + 2 :
 					 isJmp ? rt :
 					 isJmpAddr ? rt + a :
 					 isLd ? raData  :
 					 isSt ? rt :
-					 pc + 2 ; 
+					 pc + 1 ; 
 					 
 	// for the store operation
 	assign en = isSt;
-	assign raAddr = ra;
+	assign raAddr = isJzn ? pc + 1 : ra;
 	assign waddr = ra;		 
 	assign wdata = out;
 
-	assign isRecognized = (isAdd | isMul | isCmp | isMovl | isMovh | isMovPC | isJz | isJmp | isJmpAddr | isLd | isSt);			 
-	assign shouldJump = (isJz | isJmp | isJmpAddr);
+	assign isRecognized = (isAdd | isMul | isCmp | isMovl | isMovh | isMovPC | isJz | isJmp | isJmpAddr | isJzn | isLd | isSt);			 
+	assign shouldJump = (isJz | isJmp | isJmpAddr | isJzn);
 	assign shouldChangeReg = (isAdd | isMul | isCmp | isMovl | isMovh | isMovPC | isLd);
 	assign shouldDisplay = !halt & (shouldChangeReg & t == 0);
 	

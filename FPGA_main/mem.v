@@ -1,5 +1,5 @@
 module mem(input clk,
-    input [15:0]raddr0, output [15:0]rdata,
+    input [15:0]raddr0, output [15:0]rdata, 
     input [15:0]raddr1, output [15:0]raData,
     input wen0, input [15:0]waddr0, input [15:0]wdata0);
 
