@@ -7,7 +7,8 @@ module mem(input clk,
 
     /* Simulation -- read initial content from file */
     initial begin
-        $readmemh("init_file.mif",data);
+    //   $readmemh("init_file.mif",data);	
+		 $readmemh("output.mif",data);
     end
 
     // get instruction
