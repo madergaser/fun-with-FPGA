@@ -233,8 +233,8 @@ fn main() {
             }
             else {
               let mut hex = to_hex(p2.parse::<u32>().expect("wtf is happening "));
-              instruction.push(char_at(&mut hex, 0));
-              instruction.push(char_at(&mut hex, 1));
+              instruction.push(char_at(&mut hex, 2));
+              instruction.push(char_at(&mut hex, 3));
             }
             instruction.push(char_at(&mut p1, 1));
           }
