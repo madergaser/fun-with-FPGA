@@ -488,7 +488,7 @@ fn main() {
     tag_count: 0
   };
   
-  println!("Writing files!");
+  println!("Writing files for {}!", filename);
 
   outfile.write_fmt(format_args!("$MAIN\n"));
   variables(&mut state, &mut outfile);

@@ -20,4 +20,5 @@ clean :
 	rm -f *.hex
 	rm -f compiler
 	rm -f assembler
+	rm -f *.s
 
