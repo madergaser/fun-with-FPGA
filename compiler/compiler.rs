@@ -31,8 +31,8 @@ fn char_at(s: &mut String, loc: u64) -> char {
 
 fn main() {
   /* START: Read contents */
-  let file = File::open("output.mif").expect("output.mif not found");
-  let mut out = File::create("temp.hex").unwrap();
+  let file = File::open("output.s").expect("output.s not found");
+  let mut out = File::create("temp.mif").unwrap();
 
   let mut buf_reader = BufReader::new(file);
   let mut contents = String::new();
@@ -58,6 +58,7 @@ fn main() {
       main = false;
     }
     else if(ins == ".FUNCTIONS") {
+      address -=1;
       func = true;
       data = false;
       main = false;
@@ -77,6 +78,10 @@ fn main() {
     else if(func) {
       let len = content.len();
       if(ins.chars().last().unwrap() == ':') {
+        if(processing_func) {
+          address -= 1;
+        }
+        processing_func = true;
         ins.truncate(len-1);
         address += 1;
         funcs.insert(format!("${}", ins), address);
@@ -119,8 +124,8 @@ fn main() {
   // println!("the main address is at {}", main_address);
 
   /* START: resolve ISA tags */
-  let temp = File::open("temp.hex").expect("temp.hex should've bene made");
-  let mut out_file = File::create("init_file.hex").unwrap();
+  let temp = File::open("temp.mif").expect("temp.mif should've bene made");
+  let mut out_file = File::create("output.mif").unwrap();
   let mut buf_reader2 = BufReader::new(temp);
   let mut contents2 = String::new();
   buf_reader2.read_to_string(&mut contents2);
